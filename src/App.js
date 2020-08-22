@@ -1,21 +1,19 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 
-import InputLabel from "@material-ui/core/InputLabel";
-import MenuItem from "@material-ui/core/MenuItem";
-import FormControl from "@material-ui/core/FormControl";
 import Paper from "@material-ui/core/Paper";
-import Select from "@material-ui/core/Select";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableContainer from "@material-ui/core/TableContainer";
 import TableCell from "@material-ui/core/TableCell";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
+import TextField from "@material-ui/core/TextField";
 
 import { makeStyles } from "@material-ui/core/styles";
 
 import LoadingScreen from "./ui/LoadingScreen";
+import SelectCurrency from "./SelectCurrency";
 
 const CURRENCY_EXCHANGE_URL = "https://api.exchangeratesapi.io/latest";
 
@@ -26,8 +24,9 @@ const useStyles = makeStyles({
     gridGap: "20px",
     justifyItems: "center",
   },
-  formControl: {
-    minWidth: "200px",
+  amount: {
+    width: "200px",
+    marginTop: "20px",
   },
   table: {
     marginTop: "20px",
@@ -41,6 +40,7 @@ function App() {
   const [currencyRates, setCurrencyRates] = useState({});
   const [sourceCurrency, setSourceCurrency] = useState("INR");
   const [targetCurrency, setTargetCurrency] = useState(["USD"]);
+  const [amount, setAmount] = useState(1);
 
   useEffect(() => {
     (async () => {
@@ -70,6 +70,16 @@ function App() {
     })();
   }, [sourceCurrency]);
 
+  const changeSourceCurrency = useCallback(
+    (e) => setSourceCurrency(e.target.value),
+    []
+  );
+
+  const changeTargetCurrency = useCallback(
+    (e) => setTargetCurrency(e.target.value),
+    []
+  );
+
   if (isLoading) return <LoadingScreen />;
   if (Object.keys(currencyRates).length === 0) return null;
 
@@ -78,49 +88,33 @@ function App() {
   return (
     <div className={classes.sourceAndTargetWrapper}>
       <div>
-        <div>
-          <h3>Source Currency</h3>
-        </div>
-        <div>
-          <FormControl variant="filled" className={classes.formControl}>
-            <InputLabel>Source Currency</InputLabel>
-            <Select
-              value={sourceCurrency}
-              onChange={(e) => setSourceCurrency(e.target.value)}
-            >
-              {currencyOptions.map((currency) => {
-                return (
-                  <MenuItem key={currency} value={currency}>
-                    {currency}
-                  </MenuItem>
-                );
-              })}
-            </Select>
-          </FormControl>
+        <h3>Source Currency</h3>
+        <SelectCurrency
+          label="Select Source Currency"
+          defaultValue={sourceCurrency}
+          onCurrencyChange={changeSourceCurrency}
+          currencyOptions={currencyOptions}
+        />
+        <div className={classes.amount}>
+          <TextField
+            type="number"
+            label="Set Amount"
+            variant="outlined"
+            value={amount}
+            onChange={(e) => setAmount(e.target.value)}
+          />
         </div>
       </div>
-      <div className={classes.target}>
+      <div>
         <h3>Target Currencies</h3>
-        <FormControl variant="filled" className={classes.formControl}>
-          <InputLabel>Target Currency</InputLabel>
-          <Select
-            value={targetCurrency}
-            onChange={(e) => setTargetCurrency(e.target.value)}
-            multiple
-          >
-            {currencyOptions.map((currency) => {
-              return (
-                <MenuItem
-                  key={currency}
-                  disabled={sourceCurrency === currency}
-                  value={currency}
-                >
-                  {currency}
-                </MenuItem>
-              );
-            })}
-          </Select>
-        </FormControl>
+        <SelectCurrency
+          variant="target"
+          label="Select Target Currencies"
+          defaultValue={targetCurrency}
+          onCurrencyChange={changeTargetCurrency}
+          currencyOptions={currencyOptions}
+        />
+
         <div className={classes.table}>
           <TableContainer component={Paper}>
             <Table>
@@ -135,7 +129,7 @@ function App() {
                   return (
                     <TableRow hover key={currency}>
                       <TableCell>{currency}</TableCell>
-                      <TableCell>{currencyRates[currency]}</TableCell>
+                      <TableCell>{currencyRates[currency] * amount}</TableCell>
                     </TableRow>
                   );
                 })}
