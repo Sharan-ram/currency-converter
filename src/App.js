@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 
 import Paper from "@material-ui/core/Paper";
@@ -70,16 +70,6 @@ function App() {
     })();
   }, [sourceCurrency]);
 
-  const changeSourceCurrency = useCallback(
-    (e) => setSourceCurrency(e.target.value),
-    []
-  );
-
-  const changeTargetCurrency = useCallback(
-    (e) => setTargetCurrency(e.target.value),
-    []
-  );
-
   if (isLoading) return <LoadingScreen />;
   if (Object.keys(currencyRates).length === 0) return null;
 
@@ -92,7 +82,7 @@ function App() {
         <SelectCurrency
           label="Select Source Currency"
           defaultValue={sourceCurrency}
-          onCurrencyChange={changeSourceCurrency}
+          onCurrencyChange={(e) => setSourceCurrency(e.target.value)}
           currencyOptions={currencyOptions}
         />
         <div className={classes.amount}>
@@ -111,7 +101,7 @@ function App() {
           variant="target"
           label="Select Target Currencies"
           defaultValue={targetCurrency}
-          onCurrencyChange={changeTargetCurrency}
+          onCurrencyChange={(e) => setTargetCurrency(e.target.value)}
           currencyOptions={currencyOptions}
         />
 
