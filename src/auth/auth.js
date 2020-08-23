@@ -1,9 +1,8 @@
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
-const users = JSON.parse(localStorage.getItem("users"));
-
 export const registerUser = async ({ name, email, password }) => {
+  const users = JSON.parse(localStorage.getItem("users"));
   const doesUserExist = users?.find((user) => user.email === email);
   if (doesUserExist) {
     return { error: "User already exists" };
@@ -21,13 +20,16 @@ export const registerUser = async ({ name, email, password }) => {
 
   const token = jwt.sign(payload, "secret");
   const newUser = { id: userId, name, email, password: hashedPassword };
+  console.log("users", users);
   const newUsers = users ? [...users, newUser] : [newUser];
+  console.log("newUsers", newUsers);
   localStorage.setItem("users", JSON.stringify(newUsers));
   localStorage.setItem("token", token);
   return { token };
 };
 
 export const loginUser = async ({ email, password }) => {
+  const users = JSON.parse(localStorage.getItem("users"));
   const user = users?.find((user) => user.email === email);
   if (!user) {
     return { error: "Email doesnt not exist" };
@@ -48,6 +50,7 @@ export const loginUser = async ({ email, password }) => {
 };
 
 export const resetPassword = async ({ email, password }) => {
+  const users = JSON.parse(localStorage.getItem("users"));
   const user = users?.find((user) => user.email === email);
   if (!user) {
     return { error: "Email doesnt not exist" };

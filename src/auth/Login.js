@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import GoogleLogin from "react-google-login";
 
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
@@ -30,6 +31,14 @@ const Login = ({ setToken }) => {
     if (token) {
       setToken(token);
     }
+  };
+
+  const handleGoogleLoginSuccess = (response) => {
+    setToken(response.accessToken);
+  };
+
+  const handleGoogleLoginFailure = (response) => {
+    console.log("response", response);
   };
 
   return (
@@ -72,6 +81,16 @@ const Login = ({ setToken }) => {
             Signup
           </Link>
         </Typography>
+        <Typography component="p">OR</Typography>
+        <div>
+          <GoogleLogin
+            clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}
+            buttonText="Signin through Google"
+            onSuccess={handleGoogleLoginSuccess}
+            onFailure={handleGoogleLoginFailure}
+            cookiePolicy={"single_host_origin"}
+          />
+        </div>
       </form>
     </div>
   );
