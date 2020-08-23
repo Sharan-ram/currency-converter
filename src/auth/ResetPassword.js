@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
@@ -6,6 +6,7 @@ import { makeStyles } from "@material-ui/styles";
 
 import useInput from "../hooks/useInput";
 import { resetPassword } from "./auth";
+import FormErrors from "../ui/FormErrors";
 
 const useStyles = makeStyles({
   wrapper: {
@@ -35,13 +36,20 @@ const ResetPassword = ({ setToken }) => {
   const [password, setPassword] = useInput("");
   const [confirmPassword, setConfirmPassword] = useInput("");
 
+  const [error, setError] = useState("");
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const { token } = await resetPassword({ email, password });
+    const { token, error } = await resetPassword({ email, password });
     if (token) {
       setToken(token);
+    } else {
+      setError(error);
     }
   };
+
+  const confirmPasswordError =
+    confirmPassword.length > 5 && confirmPassword !== password;
 
   return (
     <div className={classes.wrapper}>
@@ -65,6 +73,7 @@ const ResetPassword = ({ setToken }) => {
               variant="outlined"
               fullWidth
               required
+              helperText="Password should be more than 5 characters"
             />
           </div>
           <div>
@@ -75,8 +84,11 @@ const ResetPassword = ({ setToken }) => {
               variant="outlined"
               fullWidth
               required
+              error={confirmPasswordError}
+              helperText={confirmPasswordError && "Passwords do not match"}
             />
           </div>
+          <FormErrors text={error} />
           <div>
             <Button
               disabled={

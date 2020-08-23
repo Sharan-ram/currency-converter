@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 
 import Button from "@material-ui/core/Button";
@@ -8,6 +8,7 @@ import { makeStyles } from "@material-ui/styles";
 
 import useInput from "../hooks/useInput";
 import { registerUser } from "./auth";
+import FormErrors from "../ui/FormErrors";
 
 const useStyles = makeStyles({
   wrapper: {
@@ -37,18 +38,25 @@ const Signup = ({ setToken }) => {
   const [password, setPassword] = useInput("");
   const [confirmPassword, setConfirmPassword] = useInput("");
 
-  const classes = useStyles();
+  const [error, setError] = useState("");
 
-  const isButtonDisabled =
-    !name.trim() || password.trim().length < 6 || password !== confirmPassword;
+  const classes = useStyles();
 
   const addUser = async (e) => {
     e.preventDefault();
-    const { token } = await registerUser({ name, email, password });
+    const { token, error } = await registerUser({ name, email, password });
     if (token) {
       setToken(token);
+    } else {
+      setError(error);
     }
   };
+
+  const confirmPasswordError =
+    confirmPassword.length > 5 && confirmPassword !== password;
+
+  const isButtonDisabled =
+    !name.trim() || password.trim().length < 6 || password !== confirmPassword;
 
   return (
     <div className={classes.wrapper}>
@@ -83,18 +91,22 @@ const Signup = ({ setToken }) => {
               variant="outlined"
               fullWidth
               required
+              helperText="Password should be more than 5 characters"
             />
           </div>
           <div>
             <TextField
+              error={confirmPasswordError}
               label="Confirm Password"
               type="password"
               onChange={setConfirmPassword}
               required
               variant="outlined"
               fullWidth
+              helperText={confirmPasswordError && "Passwords do not match"}
             />
           </div>
+          <FormErrors text={error} />
           <div>
             <Button
               type="submit"

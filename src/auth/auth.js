@@ -30,7 +30,7 @@ export const loginUser = async ({ email, password }) => {
   const users = JSON.parse(localStorage.getItem("users"));
   const user = users?.find((user) => user.email === email);
   if (!user) {
-    return { error: "Email doesnt not exist" };
+    return { error: "Email does not exist" };
   }
 
   const isPasswordCorrect = await bcrypt.compare(password, user.password);
@@ -51,7 +51,7 @@ export const resetPassword = async ({ email, password }) => {
   const users = JSON.parse(localStorage.getItem("users"));
   const user = users?.find((user) => user.email === email);
   if (!user) {
-    return { error: "Email doesnt not exist" };
+    return { error: "Email does not exist" };
   }
 
   const salt = await bcrypt.genSalt(10);

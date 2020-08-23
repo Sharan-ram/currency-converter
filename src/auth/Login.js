@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import GoogleLogin from "react-google-login";
 
@@ -7,8 +7,9 @@ import TextField from "@material-ui/core/TextField";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/styles";
 
-import useInput from "../hooks/useInput";
 import { loginUser } from "./auth";
+import useInput from "../hooks/useInput";
+import FormErrors from "../ui/FormErrors";
 
 const useStyles = makeStyles({
   wrapper: {
@@ -30,18 +31,24 @@ const useStyles = makeStyles({
   link: {
     textDecoration: "none",
   },
+  orText: {
+    justifySelf: "center",
+  },
 });
 
 const Login = ({ setToken }) => {
   const classes = useStyles();
   const [email, setEmail] = useInput("");
   const [password, setPassword] = useInput("");
+  const [error, setError] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const { token } = await loginUser({ email, password });
+    const { token, error } = await loginUser({ email, password });
     if (token) {
       setToken(token);
+    } else {
+      setError(error);
     }
   };
 
@@ -77,6 +84,7 @@ const Login = ({ setToken }) => {
               required
             />
           </div>
+          <FormErrors text={error} />
           <div>
             <Button
               disabled={!email || !password || password.length < 6}
@@ -96,7 +104,9 @@ const Login = ({ setToken }) => {
               Signup
             </Link>
           </Typography>
-          <Typography component="p">OR</Typography>
+          <div className={classes.orText}>
+            <Typography component="p">OR</Typography>
+          </div>
           <div>
             <GoogleLogin
               clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}
