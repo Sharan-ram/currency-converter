@@ -7,8 +7,16 @@ import Toolbar from "@material-ui/core/Toolbar";
 import Button from "@material-ui/core/Button";
 
 const useStyles = makeStyles({
+  appBar: {
+    background: "#343a40",
+  },
   container: {
     display: "grid",
+  },
+  linkWrapper: {
+    display: "grid",
+    gridTemplateColumns: "1fr 1fr",
+    gridGap: "10px",
   },
   link: {
     textDecoration: "none",
@@ -29,13 +37,22 @@ const TopNavigation = ({ isAuthenticated, setToken }) => {
   };
   const classes = useStyles();
   return (
-    <AppBar>
+    <AppBar className={classes.appBar}>
       <Toolbar className={classes.container}>
         <div className={classes.button}>
           {!isAuthenticated && (
-            <Link className={classes.link} to="/account/signup">
-              SIGN UP
-            </Link>
+            <div className={classes.linkWrapper}>
+              <div>
+                <Link className={classes.link} to="/account/login">
+                  LOGIN
+                </Link>
+              </div>
+              <div>
+                <Link className={classes.link} to="/account/signup">
+                  SIGNUP
+                </Link>
+              </div>
+            </div>
           )}
           {isAuthenticated && (
             <Button

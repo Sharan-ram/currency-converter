@@ -11,9 +11,21 @@ import useInput from "../hooks/useInput";
 import { loginUser } from "./auth";
 
 const useStyles = makeStyles({
+  wrapper: {
+    display: "grid",
+    justifyItems: "center",
+  },
+  container: {
+    alignSelf: "center",
+    display: "grid",
+    alignItems: "center",
+    justifyItems: "center",
+    border: "1px solid black",
+  },
   form: {
     display: "grid",
-    gridRowGap: "1em",
+    gridGap: "20px",
+    margin: "30px",
   },
   link: {
     textDecoration: "none",
@@ -42,56 +54,60 @@ const Login = ({ setToken }) => {
   };
 
   return (
-    <div>
-      <form onSubmit={handleSubmit} className={classes.form}>
-        <div>
-          <TextField
-            type="email"
-            label="Email"
-            onChange={setEmail}
-            variant="outlined"
-            fullWidth
-            required
-          />
-        </div>
-        <div>
-          <TextField
-            label="Password"
-            type="password"
-            onChange={setPassword}
-            variant="outlined"
-            fullWidth
-            required
-          />
-        </div>
-        <Button
-          disabled={!email || !password || password.length < 6}
-          variant="contained"
-          type="submit"
-          color="primary"
-        >
-          Login
-        </Button>
-        <Link to="/account/reset-password" className={classes.link}>
-          Forgot Password?
-        </Link>
-        <Typography component="p">
-          Don't have an account?{" "}
-          <Link to="/account/signup" className={classes.link}>
-            Signup
+    <div className={classes.wrapper}>
+      <div className={classes.container}>
+        <form onSubmit={handleSubmit} className={classes.form}>
+          <div>
+            <TextField
+              type="email"
+              label="Email"
+              onChange={setEmail}
+              variant="outlined"
+              fullWidth
+              required
+            />
+          </div>
+          <div>
+            <TextField
+              label="Password"
+              type="password"
+              onChange={setPassword}
+              variant="outlined"
+              fullWidth
+              required
+            />
+          </div>
+          <div>
+            <Button
+              disabled={!email || !password || password.length < 6}
+              variant="contained"
+              type="submit"
+              color="primary"
+            >
+              Login
+            </Button>
+          </div>
+          <Link to="/account/reset-password" className={classes.link}>
+            Forgot Password?
           </Link>
-        </Typography>
-        <Typography component="p">OR</Typography>
-        <div>
-          <GoogleLogin
-            clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}
-            buttonText="Signin through Google"
-            onSuccess={handleGoogleLoginSuccess}
-            onFailure={handleGoogleLoginFailure}
-            cookiePolicy={"single_host_origin"}
-          />
-        </div>
-      </form>
+          <Typography component="p">
+            Don't have an account?{" "}
+            <Link to="/account/signup" className={classes.link}>
+              Signup
+            </Link>
+          </Typography>
+          <Typography component="p">OR</Typography>
+          <div>
+            <GoogleLogin
+              clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}
+              buttonText="Signin through Google"
+              onSuccess={handleGoogleLoginSuccess}
+              onFailure={handleGoogleLoginFailure}
+              cookiePolicy={"single_host_origin"}
+            />
+          </div>
+        </form>
+      </div>
     </div>
   );
 };

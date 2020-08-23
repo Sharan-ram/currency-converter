@@ -8,9 +8,21 @@ import useInput from "../hooks/useInput";
 import { resetPassword } from "./auth";
 
 const useStyles = makeStyles({
+  wrapper: {
+    display: "grid",
+    justifyItems: "center",
+  },
+  container: {
+    alignSelf: "center",
+    display: "grid",
+    alignItems: "center",
+    justifyItems: "center",
+    border: "1px solid black",
+  },
   form: {
     display: "grid",
-    gridRowGap: "1em",
+    gridGap: "20px",
+    margin: "30px",
   },
   link: {
     textDecoration: "none",
@@ -32,52 +44,56 @@ const ResetPassword = ({ setToken }) => {
   };
 
   return (
-    <div>
-      <form onSubmit={handleSubmit} className={classes.form}>
-        <div>
-          <TextField
-            type="email"
-            label="Email"
-            onChange={setEmail}
-            variant="outlined"
-            fullWidth
-            required
-          />
-        </div>
-        <div>
-          <TextField
-            label="Password"
-            type="password"
-            onChange={setPassword}
-            variant="outlined"
-            fullWidth
-            required
-          />
-        </div>
-        <div>
-          <TextField
-            label="Confirm Password"
-            type="password"
-            onChange={setConfirmPassword}
-            variant="outlined"
-            fullWidth
-            required
-          />
-        </div>
-        <Button
-          disabled={
-            !email ||
-            !password ||
-            password.length < 6 ||
-            password !== confirmPassword
-          }
-          variant="contained"
-          type="submit"
-          color="primary"
-        >
-          Submit
-        </Button>
-      </form>
+    <div className={classes.wrapper}>
+      <div className={classes.container}>
+        <form onSubmit={handleSubmit} className={classes.form}>
+          <div>
+            <TextField
+              type="email"
+              label="Email"
+              onChange={setEmail}
+              variant="outlined"
+              fullWidth
+              required
+            />
+          </div>
+          <div>
+            <TextField
+              label="Password"
+              type="password"
+              onChange={setPassword}
+              variant="outlined"
+              fullWidth
+              required
+            />
+          </div>
+          <div>
+            <TextField
+              label="Confirm Password"
+              type="password"
+              onChange={setConfirmPassword}
+              variant="outlined"
+              fullWidth
+              required
+            />
+          </div>
+          <div>
+            <Button
+              disabled={
+                !email ||
+                !password ||
+                password.length < 6 ||
+                password !== confirmPassword
+              }
+              variant="contained"
+              type="submit"
+              color="primary"
+            >
+              Submit
+            </Button>
+          </div>
+        </form>
+      </div>
     </div>
   );
 };

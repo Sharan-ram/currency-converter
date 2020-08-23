@@ -20,9 +20,7 @@ export const registerUser = async ({ name, email, password }) => {
 
   const token = jwt.sign(payload, "secret");
   const newUser = { id: userId, name, email, password: hashedPassword };
-  console.log("users", users);
   const newUsers = users ? [...users, newUser] : [newUser];
-  console.log("newUsers", newUsers);
   localStorage.setItem("users", JSON.stringify(newUsers));
   localStorage.setItem("token", token);
   return { token };

@@ -10,9 +10,21 @@ import useInput from "../hooks/useInput";
 import { registerUser } from "./auth";
 
 const useStyles = makeStyles({
+  wrapper: {
+    display: "grid",
+    justifyItems: "center",
+  },
+  container: {
+    alignSelf: "center",
+    display: "grid",
+    alignItems: "center",
+    justifyItems: "center",
+    border: "1px solid black",
+  },
   form: {
     display: "grid",
-    gridRowGap: "1em",
+    gridRowGap: "20px",
+    margin: "30px",
   },
   link: {
     textDecoration: "none",
@@ -39,64 +51,68 @@ const Signup = ({ setToken }) => {
   };
 
   return (
-    <div>
-      <form onSubmit={addUser} className={classes.form}>
-        <div>
-          <TextField
-            label="Name"
-            value={name}
-            onChange={setName}
-            required
-            variant="outlined"
-            fullWidth
-          />
-        </div>
-        <div>
-          <TextField
-            type="email"
-            label="Email"
-            value={email}
-            onChange={setEmail}
-            required
-            variant="outlined"
-            fullWidth
-          />
-        </div>
-        <div>
-          <TextField
-            label="Password"
-            type="password"
-            onChange={setPassword}
-            variant="outlined"
-            fullWidth
-            required
-          />
-        </div>
-        <div>
-          <TextField
-            label="Confirm Password"
-            type="password"
-            onChange={setConfirmPassword}
-            required
-            variant="outlined"
-            fullWidth
-          />
-        </div>
-        <Button
-          type="submit"
-          disabled={isButtonDisabled}
-          variant="contained"
-          color="primary"
-        >
-          Signup
-        </Button>
-        <Typography component="p">
-          Already have an account?{" "}
-          <Link to="/account/login" className={classes.link}>
-            Sign In
-          </Link>
-        </Typography>
-      </form>
+    <div className={classes.wrapper}>
+      <div className={classes.container}>
+        <form onSubmit={addUser} className={classes.form}>
+          <div>
+            <TextField
+              label="Name"
+              value={name}
+              onChange={setName}
+              required
+              variant="outlined"
+              fullWidth
+            />
+          </div>
+          <div>
+            <TextField
+              type="email"
+              label="Email"
+              value={email}
+              onChange={setEmail}
+              required
+              variant="outlined"
+              fullWidth
+            />
+          </div>
+          <div>
+            <TextField
+              label="Password"
+              type="password"
+              onChange={setPassword}
+              variant="outlined"
+              fullWidth
+              required
+            />
+          </div>
+          <div>
+            <TextField
+              label="Confirm Password"
+              type="password"
+              onChange={setConfirmPassword}
+              required
+              variant="outlined"
+              fullWidth
+            />
+          </div>
+          <div>
+            <Button
+              type="submit"
+              disabled={isButtonDisabled}
+              variant="contained"
+              color="primary"
+            >
+              Signup
+            </Button>
+          </div>
+          <Typography component="p">
+            Already have an account?{" "}
+            <Link to="/account/login" className={classes.link}>
+              Sign In
+            </Link>
+          </Typography>
+        </form>
+      </div>
     </div>
   );
 };
