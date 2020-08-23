@@ -1,4 +1,5 @@
-import React, { useState } from "React";
+// eslint-disable-next-line
+import React, { useState } from "react";
 
 const useInput = (initialValue) => {
   const [value, setValue] = useState(initialValue);
