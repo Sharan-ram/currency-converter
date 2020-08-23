@@ -8,6 +8,7 @@ import {
 
 import Signup from "./auth/Signup";
 import Login from "./auth/Login";
+import ResetPassword from "./auth/ResetPassword";
 import Home from "./Home";
 
 const Auth = ({ match: { path }, setToken }) => {
@@ -22,6 +23,11 @@ const Auth = ({ match: { path }, setToken }) => {
         exact
         path={`${path}/login`}
         component={() => <Login setToken={setToken} />}
+      />
+      <Route
+        exact
+        path={`${path}/reset-password`}
+        component={() => <ResetPassword setToken={setToken} />}
       />
     </Switch>
   );

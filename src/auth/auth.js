@@ -46,3 +46,30 @@ export const loginUser = async ({ email, password }) => {
   localStorage.setItem("token", token);
   return { token };
 };
+
+export const resetPassword = async ({ email, password }) => {
+  const user = users?.find((user) => user.email === email);
+  if (!user) {
+    return { error: "Email doesnt not exist" };
+  }
+
+  const salt = await bcrypt.genSalt(10);
+  const hashedPassword = await bcrypt.hash(password, salt);
+
+  const payload = {
+    user: {
+      id: user.id,
+    },
+  };
+
+  const userWithNewPassword = { ...user, password: hashedPassword };
+  const newUsers = [
+    ...users.slice(0, user.id - 1),
+    userWithNewPassword,
+    ...users.slice(user.id),
+  ];
+  const token = jwt.sign(payload, "secret");
+  localStorage.setItem("users", JSON.stringify(newUsers));
+  localStorage.setItem("token", token);
+  return { token };
+};

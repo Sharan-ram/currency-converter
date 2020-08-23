@@ -7,7 +7,7 @@ import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/styles";
 
 import useInput from "../hooks/useInput";
-import { loginUser } from "./auth";
+import { resetPassword } from "./auth";
 
 const useStyles = makeStyles({
   form: {
@@ -19,14 +19,15 @@ const useStyles = makeStyles({
   },
 });
 
-const Login = ({ setToken }) => {
+const ResetPassword = ({ setToken }) => {
   const classes = useStyles();
   const [email, setEmail] = useInput("");
   const [password, setPassword] = useInput("");
+  const [confirmPassword, setConfirmPassword] = useInput("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const { token } = await loginUser({ email, password });
+    const { token } = await resetPassword({ email, password });
     if (token) {
       setToken(token);
     }
@@ -55,26 +56,32 @@ const Login = ({ setToken }) => {
             required
           />
         </div>
+        <div>
+          <TextField
+            label="Confirm Password"
+            type="password"
+            onChange={setConfirmPassword}
+            variant="outlined"
+            fullWidth
+            required
+          />
+        </div>
         <Button
-          disabled={!email || !password || password.length < 6}
+          disabled={
+            !email ||
+            !password ||
+            password.length < 6 ||
+            password !== confirmPassword
+          }
           variant="contained"
           type="submit"
           color="primary"
         >
-          Login
+          Submit
         </Button>
-        <Link to="/account/reset-password" className={classes.link}>
-          Forgot Password?
-        </Link>
-        <Typography component="p">
-          Don't have an account?{" "}
-          <Link to="/account/signup" className={classes.link}>
-            Signup
-          </Link>
-        </Typography>
       </form>
     </div>
   );
 };
 
-export default Login;
+export default ResetPassword;
