@@ -59,7 +59,7 @@ const ResetPassword = ({ setToken }) => {
           </div>
           <div>
             <TextField
-              label="Password"
+              label="New Password"
               type="password"
               onChange={setPassword}
               variant="outlined"
@@ -69,7 +69,7 @@ const ResetPassword = ({ setToken }) => {
           </div>
           <div>
             <TextField
-              label="Confirm Password"
+              label="Confirm New Password"
               type="password"
               onChange={setConfirmPassword}
               variant="outlined"

@@ -18,7 +18,7 @@ export const registerUser = async ({ name, email, password }) => {
     },
   };
 
-  const token = jwt.sign(payload, "secret");
+  const token = jwt.sign(payload, process.env.REACT_APP_JWT_SECRET);
   const newUser = { id: userId, name, email, password: hashedPassword };
   const newUsers = users ? [...users, newUser] : [newUser];
   localStorage.setItem("users", JSON.stringify(newUsers));
@@ -42,7 +42,7 @@ export const loginUser = async ({ email, password }) => {
       id: user.id,
     },
   };
-  const token = jwt.sign(payload, "secret");
+  const token = jwt.sign(payload, process.env.REACT_APP_JWT_SECRET);
   localStorage.setItem("token", token);
   return { token };
 };
@@ -69,7 +69,7 @@ export const resetPassword = async ({ email, password }) => {
     userWithNewPassword,
     ...users.slice(user.id),
   ];
-  const token = jwt.sign(payload, "secret");
+  const token = jwt.sign(payload, process.env.REACT_APP_JWT_SECRET);
   localStorage.setItem("users", JSON.stringify(newUsers));
   localStorage.setItem("token", token);
   return { token };
