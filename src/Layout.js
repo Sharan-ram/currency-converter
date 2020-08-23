@@ -7,16 +7,21 @@ import {
 } from "react-router-dom";
 
 import Signup from "./auth/Signup";
+import Login from "./auth/Login";
 import Home from "./Home";
 
 const Auth = ({ match: { path }, setToken }) => {
-  console.log("inside auth");
   return (
     <Switch>
       <Route
         exact
         path={`${path}/signup`}
         component={() => <Signup setToken={setToken} />}
+      />
+      <Route
+        exact
+        path={`${path}/login`}
+        component={() => <Login setToken={setToken} />}
       />
     </Switch>
   );
@@ -28,7 +33,6 @@ const PageNotFound = () => {
 
 const Layout = () => {
   const [token, setToken] = useState(localStorage.getItem("token"));
-  console.log("token inside App", token);
   return (
     <Router>
       <Switch>
@@ -43,7 +47,7 @@ const Layout = () => {
         <Route
           exact
           path="/"
-          component={!token ? () => <Redirect to="/account/signup" /> : Home}
+          component={!token ? () => <Redirect to="/account/login" /> : Home}
         />
         <Route component={PageNotFound} />
       </Switch>

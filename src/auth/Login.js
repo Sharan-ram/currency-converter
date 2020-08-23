@@ -7,7 +7,7 @@ import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/styles";
 
 import useInput from "../hooks/useInput";
-import { registerUser } from "./auth";
+import { loginUser } from "./auth";
 
 const useStyles = makeStyles({
   form: {
@@ -19,20 +19,14 @@ const useStyles = makeStyles({
   },
 });
 
-const Signup = ({ setToken }) => {
-  const [name, setName] = useInput("");
+const Login = ({ setToken }) => {
+  const classes = useStyles();
   const [email, setEmail] = useInput("");
   const [password, setPassword] = useInput("");
-  const [confirmPassword, setConfirmPassword] = useInput("");
 
-  const classes = useStyles();
-
-  const isButtonDisabled =
-    !name.trim() || password.trim().length < 6 || password !== confirmPassword;
-
-  const addUser = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const { token } = await registerUser({ name, email, password });
+    const { token } = await loginUser({ email, password });
     if (token) {
       setToken(token);
     }
@@ -40,26 +34,15 @@ const Signup = ({ setToken }) => {
 
   return (
     <div>
-      <form onSubmit={addUser} className={classes.form}>
-        <div>
-          <TextField
-            label="Name"
-            value={name}
-            onChange={setName}
-            required
-            variant="outlined"
-            fullWidth
-          />
-        </div>
+      <form onSubmit={handleSubmit} className={classes.form}>
         <div>
           <TextField
             type="email"
             label="Email"
-            value={email}
             onChange={setEmail}
-            required
             variant="outlined"
             fullWidth
+            required
           />
         </div>
         <div>
@@ -72,28 +55,18 @@ const Signup = ({ setToken }) => {
             required
           />
         </div>
-        <div>
-          <TextField
-            label="Confirm Password"
-            type="password"
-            onChange={setConfirmPassword}
-            required
-            variant="outlined"
-            fullWidth
-          />
-        </div>
         <Button
-          type="submit"
-          disabled={isButtonDisabled}
+          disabled={!email || !password || password.length < 6}
           variant="contained"
+          type="submit"
           color="primary"
         >
-          Signup
+          Login
         </Button>
         <Typography component="p">
-          Already have an account?{" "}
-          <Link to="/account/login" className={classes.link}>
-            Sign In
+          Don't have an account?{" "}
+          <Link to="/account/signup" className={classes.link}>
+            Signup
           </Link>
         </Typography>
       </form>
@@ -101,4 +74,4 @@ const Signup = ({ setToken }) => {
   );
 };
 
-export default Signup;
+export default Login;
